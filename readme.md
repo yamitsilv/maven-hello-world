@@ -1,4 +1,4 @@
-# My Java Application - Hello World
+# Java Application - Hello World
 
 ## Overview
 This repository contains a Java application along with GitHub Actions workflow and Helm chart files for deployment.
@@ -7,7 +7,7 @@ This repository contains a Java application along with GitHub Actions workflow a
 The Java application is a simple hello world, details from origin repo are in the end of this document.
 
 ## GitHub Actions
-The repository includes GitHub Actions workflow for automating building, testing, and deploying the Java application which is run on every commit.
+The repository includes GitHub Actions workflows for automating building, testing, and deploying the Java application which is run on every commit and PR.
 
 ### Workflows
 - **maven**: This workflow builds the Java application using Maven, runs tests on the Java application, builds a docker image, pushes it to dockerhub, downloads it and runs it using Dockerfile file.
@@ -40,6 +40,7 @@ The Helm chart files are used for deploying the Java application to Kubernetes c
 1. Semantic versioning functionality instead of fixed version including updating the pom file and docker tag accordingly.
 2. Setting up egress and adjusting the aplication to deliver the message to outer space using the appropriate method (possibly to the mothership api or to external device for radio transmission etc).
 3. Setting workflow to exclude irrelevant paths such as this readme file.
+4. Adding Steps to the CI pipeline scanning the code for vulnerability and licencing.
 
 
 ## Java application details
