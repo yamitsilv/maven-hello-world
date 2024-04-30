@@ -1,0 +1,5 @@
+job:
+  image:
+    repository: timayamit/test
+    tag: "1.0.1"
+    pullPolicy: IfNotPresent

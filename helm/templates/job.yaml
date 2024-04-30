@@ -1,0 +1,12 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: {{ .Release.Name }}-job
+spec:
+  template:
+    spec:
+      containers:
+        - name: my-container
+          image: "{{ .Values.job.image.repository }}:{{ .Values.job.image.tag }}"
+          imagePullPolicy: {{ .Values.job.image.pullPolicy }}
+      restartPolicy: Never

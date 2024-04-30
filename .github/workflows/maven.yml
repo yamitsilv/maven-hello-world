@@ -1,0 +1,55 @@
+name: Java CI with Maven and Docker
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    - name: Set up JDK 17
+      uses: actions/setup-java@v3
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+        cache: maven
+
+    - name: Increase Patch version using Maven Versions Plugin
+      run: mvn -B versions:set -DnewVersion=1.0.1 --file myapp/pom.xml
+      
+    - name: Compile code and Package artifact
+      run: mvn clean package --file myapp/pom.xml
+      env:
+        MAVEN_OPTS: -Dmaven.repo.local=./.m2/repository
+
+    - name: Create artifact
+      uses: actions/upload-artifact@v2
+      with:
+       name: myapp
+       path: myapp/target/*.jar
+       
+    - name: Build Docker image
+      run: |
+        docker build -t timayamit/myapp:${{ vars.VERSION }} .
+      env:
+        DOCKER_BUILDKIT: 1
+
+    - name: Push image to DockerHub
+      run: |
+          echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+          docker push timayamit/myapp:${{ vars.VERSION }}
+  run:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Sleep for 60 seconds
+      run: sleep 60s
+      shell: bash
+    - name: Download and run Docker image
+      run: |
+          docker pull timayamit/myapp:${{ vars.VERSION }}
+          docker run -d timayamit/myapp:${{ vars.VERSION }}
