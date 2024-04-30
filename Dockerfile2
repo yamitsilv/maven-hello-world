@@ -1,0 +1,29 @@
+# Stage 1: Build the Java application
+FROM maven:3.8.4-openjdk-17 AS builder
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy the Maven project file
+COPY myapp/pom.xml .
+
+# Edit the version, download dependencies and cache them in a separate layer
+RUN mvn -B versions:set -DnewVersion=1.0.1 --file pom.xml | mvn dependency:go-offline -B
+
+# Copy the application source code
+COPY myapp/src ./src
+
+# Build the application
+RUN mvn package -DskipTests
+
+# Stage 2: Create the final Docker image
+FROM eclipse-temurin:17-jre
+
+# Set the working directory inside the container
+WORKDIR /app
+
+# Copy the compiled JAR file from the builder stage
+COPY --from=builder /app/target/*.jar myapp.jar
+
+# Specify the command to run the application
+CMD ["java", "-jar", "myapp.jar"]

@@ -1,4 +1,48 @@
-# A simple, minimal Maven example: hello world
+# My Java Application - Hello World
+
+## Overview
+This repository contains a Java application along with GitHub Actions workflow and Helm chart files for deployment.
+
+## Java Application
+The Java application is a simple hello world, details from origin repo are in the end of this document.
+
+## GitHub Actions
+The repository includes GitHub Actions workflow for automating building, testing, and deploying the Java application which is run on every commit.
+
+### Workflows
+- **maven**: This workflow builds the Java application using Maven, runs tests on the Java application, builds a docker image, pushes it to dockerhub, downloads it and runs it using Dockerfile file.
+- **docker-image**: This workflow also builds the Java application but inside the docker container without running tests, using Dockerfile2 file.
+
+## Helm Charts
+The Helm chart files are used for deploying the Java application to Kubernetes clusters as a job.
+
+### Files
+- `Chart.yaml`: Contains metadata about the Helm chart.
+- `values.yaml`: Contains default values for the Helm chart.
+- `templates/job.yaml`: Defines a Kubernetes Job for running the Java application.
+
+### Usage
+1. Install Helm on your local machine if you haven't already.
+2. Customize the Helm chart values in the `values.yaml` file if needed.
+3. Deploy the Java application using Helm:
+
+   ```bash
+   helm install myappjob ./helm
+   ```
+   
+4. You can view the creted job using the command
+
+   ```bash
+   kubectl get jobs
+   ```
+   
+## Future improvements suggestions
+1. Semantic versioning functionality instead of fixed version including updating the pom file and docker tag accordingly.
+2. Setting up egress and adjusting the aplication to deliver the message to outer space using the appropriate method (possibly to the mothership api or to external device for radio transmission etc).
+3. Setting workflow to exclude irrelevant paths such as this readme file.
+
+
+## Java application details
 
 To create the files in this git repo we've already run `mvn archetype:generate` from http://maven.apache.org/guides/getting-started/maven-in-five-minutes.html
     

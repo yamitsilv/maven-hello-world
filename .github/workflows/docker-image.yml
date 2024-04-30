@@ -1,0 +1,36 @@
+name: Multy-layer Docker Image CI
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+    branches: [ "main" ]
+
+jobs:
+
+  build:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Build the Docker image
+      run: docker build . --file Dockerfile2 --tag timayamit/myapp2:${{ vars.VERSION }}
+
+    - name: Push Docker image to Docker Hub
+      run: |
+          echo "${{ secrets.DOCKERHUB_PASSWORD }}" | docker login -u "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+          docker push  timayamit/myapp2:${{ vars.VERSION }}
+  run:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Sleep for 60 seconds
+      run: sleep 60s
+      shell: bash
+    - name: Download and run Docker image
+      run: |
+          docker pull timayamit/myapp2:${{ vars.VERSION }}
+          docker run -d timayamit/myapp2:${{ vars.VERSION }}
+
