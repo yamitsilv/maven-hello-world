@@ -2,9 +2,9 @@ name: Multy-layer Docker Image CI
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "main", "master" ]
   pull_request:
-    branches: [ "main" ]
+    branches: [ "main", "master" ] 
 
 jobs:
 
@@ -29,6 +29,7 @@ jobs:
     - name: Sleep for 60 seconds
       run: sleep 60s
       shell: bash
+      
     - name: Download and run Docker image
       run: |
           docker pull timayamit/myapp2:${{ vars.VERSION }}
