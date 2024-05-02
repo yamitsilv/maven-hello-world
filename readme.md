@@ -1,4 +1,4 @@
-# Java Application - Hello World
+#  Java Application - Hello World
 
 ## Overview
 This repository contains a Java application along with GitHub Actions workflow and Helm chart files for deployment.
